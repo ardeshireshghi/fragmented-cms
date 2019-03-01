@@ -11,7 +11,7 @@ const {
   getFilesByPattern
 } = require('./lib/utils');
 
-const config = require('./lib/config');
+const config = require('../.gitfragmentconfig');
 
 async function compileFragmentsWithContent({ gitService, fragmentExt, fileBuffer }) {
   const $ = dom(fileBuffer.toString());
