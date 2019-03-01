@@ -1,0 +1,63 @@
+html {
+  font-size: 1em;
+}
+
+body {
+  margin: 0;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  color: #333;
+  background-color: #bcb9b21f;
+}
+
+h1 {
+  margin: 0 auto;
+  padding: 2rem 0;
+  display: block;
+}
+
+p {
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+}
+
+.container {
+  max-width: 90%;
+  margin: auto;
+}
+
+@media screen and (min-width: 1200px) {
+  .container {
+    max-width: 1180px;
+  }
+}
+
+.page__desc {
+  padding: 0 0 2rem 0;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(img/hero.jpg);
+  background-size: cover;
+  background-position: center;
+  min-height: 90vh;
+}
+
+.hero .hero__title {
+  font-size: 4rem;
+  color: white;
+  text-shadow: 0 0 1px gainsboro;
+  background-color:#473c1c0f;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.hero .hero__text {
+  font-size: 1.616rem;
+  color: #d8b32ae8;
+  margin: 0 auto;
+  text-align: center;
+}
