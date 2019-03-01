@@ -1,79 +1,66 @@
-/* eslint no-console: "off" */
-
-const path = require('path');
-const git = require('simple-git/promise');
-const fs = require('fs');
 const pretty = require('pretty');
 
 const { dom } = require('./lib/dom');
+const { writeToTargetPath } = require('./lib/writer');
+const { GitService } = require('./lib/git');
 
 const {
   getFileContent,
-  safeWriteToFileStream,
-  mkdirpAsync,
-  rmDirRecursiveAsync,
   getFilesByPattern
 } = require('./lib/utils');
 
 const config = require('./lib/config');
 
-async function replaceFileFragmentsWithContent({
-  git: gitConfig, fragmentExt, srcPath, targetPath, sourceFilePath, fileBuffer
-}) {
-  const targetFullPath = `${targetPath}${sourceFilePath.replace(srcPath, '')}`;
+async function compileFragmentsWithContent({ gitService, fragmentExt, fileBuffer }) {
   const $ = dom(fileBuffer.toString());
+  const fragments = Array.from($('fragment'));
 
-  const readContentAndReplace = (fragmentSrc, fragmentDomEl) => {
-    const fragmentLocalPath = `${gitConfig.local}${fragmentSrc}.${fragmentExt}`;
+  await Promise.all(
+    fragments.map(async (el) => {
+      const fragmentSrc = $(el).attr('src');
+      const fragmentGitPath = `${fragmentSrc}.${fragmentExt}`;
+      const fragmentContent = (await gitService.getContent(fragmentGitPath)).toString();
+      $(el).replaceWith(fragmentContent);
+    })
+  );
 
-    return new Promise(async (resolve) => {
-      const fragmentContent = (await getFileContent(fragmentLocalPath)).toString();
-      $(fragmentDomEl).replaceWith(fragmentContent);
-
-      resolve();
-    });
-  };
-
-  const fragmentsCompileContentPromises = $('fragment')
-    .map((_, fragmentEl) => readContentAndReplace($(fragmentEl).attr('src'), fragmentEl));
-
-  await Promise.all(Array.from(fragmentsCompileContentPromises));
-
-  // Create directory in target if it does not exist
-  if (!fs.existsSync(path.dirname(targetFullPath))) {
-    await mkdirpAsync(path.dirname(targetFullPath));
-  }
-
-  safeWriteToFileStream(fs.createWriteStream(targetFullPath), pretty($.html()), () => {
-    console.log('Compiled file %s to %s successfully', sourceFilePath, targetFullPath);
-  });
+  return pretty($.html());
 }
-
-async function renderFragmentTags(compilerConfig) {
-  const { pattern, srcPath } = compilerConfig;
+async function compile({ gitService, compilerConfig }) {
+  const { pattern, srcPath, targetPath } = compilerConfig;
 
   const filePaths = await getFilesByPattern(srcPath, pattern);
   const fileContents = await Promise.all(filePaths.map(getFileContent));
 
-  fileContents.forEach((fileBuffer, index) => {
-    replaceFileFragmentsWithContent({
+  fileContents.forEach(async (fileBuffer, index) => {
+    const sourceFilePath = filePaths[index];
+    const compiledFileData = await compileFragmentsWithContent({
       ...compilerConfig,
-      sourceFilePath: filePaths[index],
-      fileBuffer
+      fileBuffer,
+      gitService
+    });
+
+    writeToTargetPath({
+      sourceFilePath,
+      targetPath,
+      srcPath,
+      compiledFileData
     });
   });
 }
 
-async function cloneGitContentRepo({ remote, local }) {
-  await rmDirRecursiveAsync(local);
-  await git().silent(true)
-    .clone(remote, local)
-    .catch(err => console.error('failed: ', err));
-}
-
 async function main(compilerConfig) {
-  await cloneGitContentRepo(compilerConfig.git);
-  await renderFragmentTags(compilerConfig);
+  const { remote: remoteOrigin, local: localPath } = compilerConfig.git;
+  const gitService = GitService({
+    remoteOrigin,
+    localPath
+  });
+
+  await gitService.fetch();
+  await compile({
+    gitService,
+    compilerConfig
+  });
 }
 
 main(config);
