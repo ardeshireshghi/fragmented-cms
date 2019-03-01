@@ -57,3 +57,40 @@ module.exports = {
 
 Above is an example config. Once that is done then by running `bin/git-fragments-compile` it should resolve the `fragment` tags and copy files to `targetPath` as configured.
 
+Below is the output file:
+
+```html
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Some HTML file</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    </link>
+  </head>
+
+  <body>
+    <div class="hero">
+      <div class="hero__inner">
+        <div class="hero__title">
+          This is the new title of the hero
+
+        </div>
+        <p class="hero__text">
+          Some things are better to be done than said
+
+        </p>
+      </div>
+    </div>
+    <main id="main" class="container">
+      <h1> Welcome to the world of git fragments </h1>
+      <div class="page__desc">
+        <p>This is a demo page to show the usage of fragments to create static websites. The idea is to make use of version control and simple html to help none technical people manage content for marketing and other purposes</p>
+
+      </div>
+    </main>
+  </body>
+
+</html>
+```
+
