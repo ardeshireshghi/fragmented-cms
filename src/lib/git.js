@@ -20,7 +20,7 @@ exports.GitService = (() => {
     }
 
     async function getContent(fragmentFilePath) {
-      await getFileContent(`${localPath}${fragmentFilePath}`);
+      return (await getFileContent(`${localPath}${fragmentFilePath}`)).toString();
     }
 
     return {

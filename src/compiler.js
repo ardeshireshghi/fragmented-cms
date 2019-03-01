@@ -1,3 +1,5 @@
+/* eslint no-console: "off" */
+
 const pretty = require('pretty');
 
 const { dom } = require('./lib/dom');
@@ -56,11 +58,15 @@ async function main(compilerConfig) {
     localPath
   });
 
-  await gitService.fetch();
-  await compile({
-    gitService,
-    compilerConfig
-  });
+  try {
+    await gitService.fetch();
+    await compile({
+      gitService,
+      compilerConfig
+    });
+  } catch (err) {
+    console.log(err.trace(), err.message);
+  }
 }
 
 main(config);
