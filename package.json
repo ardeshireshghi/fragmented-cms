@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "npx eslint --fix src",
-    "compile": "node src/compiler.js",
+    "compile": "bin/git-fragments-compile",
     "serve": "npx http-server -d false ./assets-dist"
   },
   "keywords": [],

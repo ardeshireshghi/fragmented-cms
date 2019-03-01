@@ -5,7 +5,7 @@ Git fragments allow creating static website which uses `fragment` tags to pull c
 
 ## Get Started
 
-Create an HTML file (e.g. index.html) and create the HTML markup. For any content that needs to be loaded from Git use `fragment` tag and provide the `src`. 
+Create an HTML file (e.g. index.html) and create the HTML markup. For any content that needs to be loaded from Git use `fragment` tag and provide the `src`.
 
 The `compiler` will then need be configured with the Git repo URL. The `src` should provide the path of the file within the remote Repo. The content files in the Repo should have `.fragment.html` extension. There is no need to add that in the `src`.
 
@@ -43,18 +43,17 @@ The config can set as `.gitfragmentconfig.js` and it will be used by the compile
 const path = require('path');
 
 module.exports = {
-  srcPath: path.join(__dirname, '..', '..', 'assets-src'),
-  targetPath: path.join(__dirname, '..', '..', 'assets-dist'),
+  srcPath: path.join(__dirname, 'assets-src'),
+  targetPath: path.join(__dirname, 'assets-dist'),
   pattern: /html$/,
   git: {
     remote: 'https://github.com/ardeshireshghi/git-fragments.git',
-    local: path.join(__dirname, '..', '..', 'tmp')
+    local: path.join(__dirname, 'tmp')
   },
   fragmentExt: 'fragment.html'
 };
 
-Above is an example config. Once that is done then `npm run compile` should resolve the `fragment` tags and copy files to `targetPath` as configured.
-
-
 ```
+
+Above is an example config. Once that is done then by running `bin/git-fragments-compile` it should resolve the `fragment` tags and copy files to `targetPath` as configured.
 

@@ -51,7 +51,7 @@ async function compile({ gitService, compilerConfig }) {
   });
 }
 
-async function main(compilerConfig) {
+async function startCompile(compilerConfig) {
   const { remote: remoteOrigin, local: localPath } = compilerConfig.git;
   const gitService = GitService({
     remoteOrigin,
@@ -69,4 +69,8 @@ async function main(compilerConfig) {
   }
 }
 
-main(config);
+module.exports = {
+  compile() {
+    startCompile(config);
+  }
+};
