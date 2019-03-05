@@ -8,5 +8,8 @@ module.exports = {
     remote: 'https://github.com/ardeshireshghi/git-fragments.git',
     local: path.join(__dirname, 'tmp')
   },
+  s3: {
+    bucket: 'gitfragment-website-content'
+  },
   fragmentExt: 'fragment.html'
 };
