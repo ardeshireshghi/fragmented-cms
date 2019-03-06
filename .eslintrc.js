@@ -28,6 +28,7 @@ module.exports = {
         "comma-dangle": [
             "error",
             "never"
-        ]
+        ],
+        "no-underscore-dangle": [2,  { "allowAfterThis": true } ]
     }
 };

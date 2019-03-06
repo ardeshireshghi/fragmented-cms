@@ -43,29 +43,33 @@ async function compile(config) {
   const fileContents = await Promise.all(filePaths.map(getFileContent));
 
   try {
-    fileContents.forEach(async (fileBuffer, index) => {
-      const sourceFilePath = filePaths[index];
-      let compiledFileData;
+    await Promise.all(
+      fileContents.map(async (fileBuffer, index) => {
+        const sourceFilePath = filePaths[index];
+        try {
+          const compiledFileData = await compileFragmentsWithContent({
+            ...config,
+            fileBuffer,
+            serviceManager
+          });
 
-      try {
-        compiledFileData = await compileFragmentsWithContent({
-          ...config,
-          fileBuffer,
-          serviceManager
-        });
-      } catch(err) {
-        throw err;
-      }
-
-      writeToTargetPath({
-        sourceFilePath,
-        targetPath,
-        srcPath,
-        compiledFileData
-      });
-    });
+          return writeToTargetPath({
+            sourceFilePath,
+            targetPath,
+            srcPath,
+            compiledFileData
+          });
+        } catch (err) {
+          console.error(`Error while compiling fragment in file: ${sourceFilePath}`);
+          throw err;
+        }
+      })
+    );
   } catch (err) {
-    console.log(err.trace(), err.message);
+    console.error('Error compiling the fragments', err.message);
+    if (err.stack) {
+      console.error('Below is the trace: \n', err.stack);
+    }
     process.exit(1);
   }
 }

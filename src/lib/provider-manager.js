@@ -1,7 +1,7 @@
 const { createService } = require('./providers/factory');
 
 exports.ServiceProviderManager = (config) => {
-  let services = {};
+  const services = {};
 
   async function getService(backendName) {
     if (!(backendName in services)) {
