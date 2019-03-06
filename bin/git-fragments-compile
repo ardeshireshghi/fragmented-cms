@@ -1,4 +1,6 @@
 #!/usr/bin/env node
 
+const config = require('../.gitfragmentconfig');
 const gitFragmentCompiler = require('../src/compiler');
-gitFragmentCompiler.compile();
+
+gitFragmentCompiler.compile(config);

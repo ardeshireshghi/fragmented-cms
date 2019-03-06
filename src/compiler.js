@@ -11,11 +11,7 @@ const {
   getFilesByPattern
 } = require('./lib/utils');
 
-const config = require('../.gitfragmentconfig');
-
-const serviceManager = ServiceProviderManager(config);
-
-async function compileFragmentsWithContent({ fragmentExt, fileBuffer }) {
+async function compileFragmentsWithContent({ fragmentExt, fileBuffer, serviceManager }) {
   const $ = dom(fileBuffer.toString());
   const fragments = Array.from($('fragment'));
 
@@ -24,8 +20,8 @@ async function compileFragmentsWithContent({ fragmentExt, fileBuffer }) {
       const fragmentSrc = $(el).attr('src');
       const fragmentBackend = $(el).attr('backend');
 
-      if (!fragmentBackend) {
-        throw new Error('Backend attribute is not defined on', el);
+      if (!fragmentBackend || !fragmentSrc) {
+        throw new Error(`attribute "backend" or "src" not defined on fragment ${$(el).parent().html()}`);
       }
 
       const service = await serviceManager.getService(fragmentBackend);
@@ -39,40 +35,41 @@ async function compileFragmentsWithContent({ fragmentExt, fileBuffer }) {
   return pretty($.html());
 }
 
-async function compile({ compilerConfig }) {
-  const { pattern, srcPath, targetPath } = compilerConfig;
+async function compile(config) {
+  const { pattern, srcPath, targetPath } = config;
+  const serviceManager = ServiceProviderManager(config);
 
   const filePaths = await getFilesByPattern(srcPath, pattern);
   const fileContents = await Promise.all(filePaths.map(getFileContent));
 
-  fileContents.forEach(async (fileBuffer, index) => {
-    const sourceFilePath = filePaths[index];
-    const compiledFileData = await compileFragmentsWithContent({
-      ...compilerConfig,
-      fileBuffer
-    });
-
-    writeToTargetPath({
-      sourceFilePath,
-      targetPath,
-      srcPath,
-      compiledFileData
-    });
-  });
-}
-
-async function startCompile(compilerConfig) {
   try {
-    await compile({
-      compilerConfig
+    fileContents.forEach(async (fileBuffer, index) => {
+      const sourceFilePath = filePaths[index];
+      let compiledFileData;
+
+      try {
+        compiledFileData = await compileFragmentsWithContent({
+          ...config,
+          fileBuffer,
+          serviceManager
+        });
+      } catch(err) {
+        throw err;
+      }
+
+      writeToTargetPath({
+        sourceFilePath,
+        targetPath,
+        srcPath,
+        compiledFileData
+      });
     });
   } catch (err) {
     console.log(err.trace(), err.message);
+    process.exit(1);
   }
 }
 
 module.exports = {
-  compile() {
-    startCompile(config);
-  }
+  compile
 };
