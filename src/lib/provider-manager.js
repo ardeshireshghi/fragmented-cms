@@ -29,6 +29,9 @@ exports.ServiceProviderManager = (config) => {
 
   async function getService(backendName) {
     if (!(backendName in services)) {
+      if (!(backendName in paramsProvider)) {
+        throw new Error(`Backend service ${backendName} is not available`);
+      }
       services[backendName] = createService(backendName, paramsProvider[backendName]());
 
       if (backendName === 'git') {
