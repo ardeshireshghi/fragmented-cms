@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-const config = require('../.gitfragmentconfig');
+const appRoot = require('app-root-path');
+
+const config = require(`${appRoot}/.fragment-cms-config.js`);
 const gitFragmentCompiler = require('../src/compiler');
 
 gitFragmentCompiler.compile(config);

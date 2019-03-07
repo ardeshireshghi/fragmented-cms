@@ -1,8 +1,8 @@
 {
-  "name": "git-fragments",
+  "name": "fragmented-cms",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "bin/fragmented-cms-compile",
   "watch": {
     "compile": {
       "patterns": [
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "lint": "npx eslint --fix src",
-    "compile": "bin/git-fragments-compile",
+    "compile": "bin/fragmented-cms-compile",
     "watch": "npx npm-watch &",
     "watch:stop": "ps au | grep -v grep | grep npm-watch | awk '{print $2}' | xargs kill -9",
     "serve": "npm run watch && npx http-server -d false ./assets-dist"
@@ -23,6 +23,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "app-root-path": "^2.1.0",
     "aws-sdk": "^2.414.0",
     "cheerio": "^1.0.0-rc.2",
     "eslint-plugin-import": "^2.16.0",

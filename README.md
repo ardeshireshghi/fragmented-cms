@@ -1,6 +1,6 @@
-# fragment-CMS
+# Fragmented CMS
 
-Fragment CMS allow creating static website which uses `fragment` tags to pull content from various data sources. Currently it supports below:
+"Fragmented CMS" allows creating static website which uses `fragment` tags to pull content from various data sources. Currently it supports below:
 
 * Git repository
 * AWS S3 Bucket
@@ -70,7 +70,7 @@ For wordpress `src` is a reference to `page` or `'post` along with the ID. Below
 
 The `compiler` will then need be configured with the fragment source.
 
-The config can set as `.gitfragmentconfig.js` and it will be used by the compiler.
+The config file should be named `.fragment-cms-config.js` and placed in the root folder. It will be used by the compiler.
 
 ```js
 const path = require('path');
