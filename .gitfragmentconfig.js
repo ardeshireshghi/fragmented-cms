@@ -11,5 +11,8 @@ module.exports = {
   s3: {
     bucket: 'gitfragment-website-content'
   },
+  wordpress: {
+    url: 'https://www.theflair.co.uk'
+  },
   fragmentExt: 'fragment.html'
 };

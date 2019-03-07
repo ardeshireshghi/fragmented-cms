@@ -25,7 +25,7 @@ async function compileFragmentsWithContent({ fragmentExt, fileBuffer, serviceMan
       }
 
       const service = await serviceManager.getService(fragmentBackend);
-      const fragmentPath = `${fragmentSrc}.${fragmentExt}`;
+      const fragmentPath = (fragmentBackend !== 'wordpress') ? `${fragmentSrc}.${fragmentExt}` : fragmentSrc;
 
       const fragmentContent = (await service.getContent(fragmentPath)).toString();
       $(el).replaceWith(fragmentContent);

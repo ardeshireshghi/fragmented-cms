@@ -3,10 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "watch": {
+    "compile": {
+      "patterns": [
+        "assets-src"
+      ],
+      "extensions": "html,css",
+      "quiet": false
+    }
+  },
   "scripts": {
     "lint": "npx eslint --fix src",
     "compile": "bin/git-fragments-compile",
-    "serve": "npx http-server -d false ./assets-dist"
+    "watch": "npx npm-watch &",
+    "watch:stop": "ps au | grep -v grep | grep npm-watch | awk '{print $2}' | xargs kill -9",
+    "serve": "npm run watch && npx http-server -d false ./assets-dist"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +29,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
     "mkdirp": "^0.5.1",
+    "node-fetch": "^2.3.0",
     "pretty": "^2.0.0",
     "recursive-readdir": "^2.2.2",
     "rimraf": "^2.6.3",
@@ -26,6 +38,7 @@
   "devDependencies": {
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "npm-watch": "^0.6.0"
   }
 }

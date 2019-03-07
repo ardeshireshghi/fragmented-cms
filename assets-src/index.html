@@ -20,9 +20,15 @@
       <div class="page__desc">
         <fragment backend="git" src="/content/example-page/main-desc"></fragment>
       </div>
+      <div class="wordpress-post">
+        <h2>This is an example of a Wordpress page embedded</h2>
+        <fragment backend="wordpress" src="/pages/107"></fragment>
+      </div>
       </main>
-      <footer>
-        <fragment backend="s3" src="/footer"></fragment>
+      <footer class="footer">
+        <div class="container">
+          <fragment backend="s3" src="/footer"></fragment>
+        </div>
       </footer>
   </body>
 </html>

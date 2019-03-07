@@ -25,6 +25,16 @@ p {
   margin: auto;
 }
 
+img {
+  max-width: 100% !important;
+  height: auto;
+}
+.footer {
+  background-color: rgb(82, 70, 70);
+  color: white;
+  padding: 1rem 0;
+}
+
 @media screen and (min-width: 1200px) {
   .container {
     max-width: 1180px;
